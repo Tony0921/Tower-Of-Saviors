@@ -18,13 +18,42 @@ local scene = composer.newScene( )
 --=======================================================================================
 --宣告區域變數
 --=======================================================================================
-local initial
+local map
+local top
+local floor
+local mapGroup = display.newGroup( )
 
+--function
+local initial
 --=======================================================================================
 --定義各種函式
 --=======================================================================================
 initial = function ( group )
-	
+	map = display.newImageRect( mapGroup, "Images/map.png", 0, 0 )
+	map.width = _SCREEN.WIDTH
+	map.height = 5798 / 3.375
+	map.x = 0
+	map.y = 0
+
+	group:insert( mapGroup )
+	mapGroup.x = _SCREEN.CENTER.X
+	mapGroup.y = _SCREEN.CENTER.Y + 125
+
+	top = display.newImageRect( group, "Images/newTop.png", 0, 0 )
+	top.x = 0
+	top.y = 0
+	top.anchorX = 0
+	top.anchorY = 0
+	top.width = _SCREEN.WIDTH
+	top.height = 242 / (1077/320)
+
+	floor = display.newImageRect( group, "Images/newFloor.png", 0, 0 )
+	floor.x = 0
+	floor.y = _SCREEN.HEIGHT
+	floor.anchorX = 0
+	floor.anchorY = 1
+	floor.width = _SCREEN.WIDTH
+	floor.height = 313 / (1080/320)
 end
 --=======================================================================================
 --Composer
