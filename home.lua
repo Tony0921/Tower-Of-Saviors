@@ -25,6 +25,7 @@ local mapGroup = display.newGroup( )
 
 --function
 local initial
+local move
 --=======================================================================================
 --定義各種函式
 --=======================================================================================
@@ -32,12 +33,13 @@ initial = function ( group )
 	map = display.newImageRect( mapGroup, "Images/map.png", 0, 0 )
 	map.width = _SCREEN.WIDTH
 	map.height = 5798 / 3.375
-	map.x = 0
-	map.y = 0
+	map.x = _SCREEN.CENTER.X
+	map.y = _SCREEN.CENTER.Y + 125
+	map:addEventListener( "touch", move )
 
 	group:insert( mapGroup )
-	mapGroup.x = _SCREEN.CENTER.X
-	mapGroup.y = _SCREEN.CENTER.Y + 125
+	mapGroup.x = 0
+	mapGroup.y = 0
 
 	top = display.newImageRect( group, "Images/newTop.png", 0, 0 )
 	top.x = 0
@@ -54,6 +56,30 @@ initial = function ( group )
 	floor.anchorY = 1
 	floor.width = _SCREEN.WIDTH
 	floor.height = 313 / (1080/320)
+end
+
+move = function ( e )
+	if e.phase == "began" then
+		display.getCurrentStage( ):setFocus( map )
+		map.oldY = map.y
+
+		-- map.y = e.y
+	elseif e.phase == "moved" then
+		if ( e.target.oldY == nil) then
+			return true
+		end
+
+		local move_y = e.y - e.yStart
+
+		map.y = map.oldY + move_y
+		if e.target.y > 838 then
+			e.target.y = 838
+		elseif e.target.y < -358 then
+			e.target.y = -358
+		end
+	elseif e.phase == "canclled" or e.phase == "ended" then
+		display.getCurrentStage( ):setFocus( nil )
+	end
 end
 --=======================================================================================
 --Composer
