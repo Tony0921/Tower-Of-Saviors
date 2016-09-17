@@ -32,9 +32,9 @@ local move
 initial = function ( group )
 	map = display.newImageRect( mapGroup, "Images/map.png", 0, 0 )
 	map.width = _SCREEN.WIDTH
-	map.height = 5798 / 3.375
+	map.height = 6635 / 3.375
 	map.x = _SCREEN.CENTER.X
-	map.y = _SCREEN.CENTER.Y + 125
+	map.y = _SCREEN.CENTER.Y
 	map:addEventListener( "touch", move )
 
 	group:insert( mapGroup )
@@ -63,22 +63,34 @@ move = function ( e )
 		display.getCurrentStage( ):setFocus( map )
 		map.oldY = map.y
 
-		-- map.y = e.y
 	elseif e.phase == "moved" then
 		if ( e.target.oldY == nil) then
 			return true
 		end
 
 		local move_y = e.y - e.yStart
-
 		map.y = map.oldY + move_y
-		if e.target.y > 838 then
-			e.target.y = 838
-		elseif e.target.y < -358 then
-			e.target.y = -358
+
+		if e.target.y > 960 then
+			e.target.y = 960
+		elseif e.target.y < -482 then
+			e.target.y = -482
 		end
+
 	elseif e.phase == "canclled" or e.phase == "ended" then
 		display.getCurrentStage( ):setFocus( nil )
+		print( e.target.y )
+
+		if e.target.y > 240 and e.target.y < 600 then
+			transition.to( e.target, {time = 500, y = 240, transition = easing.outQuart} )
+		elseif e.target.y >= 600 and e.target.y < 960 then
+			transition.to( e.target, {time = 500, y = 960, transition = easing.outQuart} )
+		elseif e.target.y > -121 and e.target.y < 240 then
+			transition.to( e.target, {time = 500, y = 240, transition = easing.outQuart} )
+		elseif e.target.y > -482 and e.target.y <= -121 then
+			transition.to( e.target, {time = 500, y = -482, transition = easing.outQuart} )
+		end
+
 	end
 end
 --=======================================================================================
