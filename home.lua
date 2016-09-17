@@ -21,11 +21,13 @@ local scene = composer.newScene( )
 local map
 local top
 local floor
+local message
 local mapGroup = display.newGroup( )
 
 --function
 local initial
 local move
+local floatMessage
 --=======================================================================================
 --定義各種函式
 --=======================================================================================
@@ -56,9 +58,17 @@ initial = function ( group )
 	floor.anchorY = 1
 	floor.width = _SCREEN.WIDTH
 	floor.height = 313 / (1080/320)
+
+	message = display.newImageRect( group, "Images/message.png", 0, 0 )
+	message.x = 15
+	message.y = _SCREEN.CENTER.Y
+	message.width = 40
+	message.height = 40
+	message:addEventListener( "touch", floatMessage )
 end
 
 move = function ( e )
+	-- print( "map move" )
 	if e.phase == "began" then
 		display.getCurrentStage( ):setFocus( map )
 		map.oldY = map.y
@@ -79,7 +89,7 @@ move = function ( e )
 
 	elseif e.phase == "canclled" or e.phase == "ended" then
 		display.getCurrentStage( ):setFocus( nil )
-		print( e.target.y )
+		-- print( e.target.y )
 
 		if e.target.y > 240 and e.target.y < 600 then
 			transition.to( e.target, {time = 500, y = 240, transition = easing.outQuart} )
@@ -92,6 +102,47 @@ move = function ( e )
 		end
 
 	end
+	return true
+end
+
+floatMessage = function ( e )
+	-- print( "floatMessage" )
+	if e.phase == "began" then
+		-- print( "floatMessage began" )
+		display.getCurrentStage( ):setFocus( message )
+		message.oldX = message.x
+		message.oldY = message.y
+	elseif e.phase == "moved" then
+
+		-- if ( e.target.oldY == nil) then
+		-- 	return true
+		-- end
+
+		local move_x = e.x - e.xStart
+		local move_y = e.y - e.yStart
+		message.x = message.oldX + move_x
+		message.y = message.oldY + move_y
+
+	elseif e.phase == "canclled" or e.phase == "ended" then
+		
+		if e.target.x < 15 then
+			transition.to( e.target, {time = 500, x = 15, transition = easing.outQuart} )
+		elseif e.target.x > 15 and e.target.x < _SCREEN.CENTER.X then
+			transition.to( e.target, {time = 500, x = 15, transition = easing.outQuart} )
+		elseif e.target.x >= _SCREEN.CENTER.X and e.target.x < _SCREEN.WIDTH - 15 then
+			transition.to( e.target, {time = 500, x = _SCREEN.WIDTH - 15, transition = easing.outQuart} )
+		elseif e.target.x > _SCREEN.WIDTH - 15 then
+			transition.to( e.target, {time = 500, x = _SCREEN.WIDTH - 15, transition = easing.outQuart} )
+		end
+		if e.target.y < 20 then
+			transition.to( e.target, {time = 500, y = 20, transition = easing.outQuart} )
+		elseif e.target.y > _SCREEN.HEIGHT - 60 then
+			transition.to( e.target, {time = 500, y = _SCREEN.HEIGHT - 60, transition = easing.outQuart} )
+		end
+
+		display.getCurrentStage( ):setFocus( nil )
+	end
+	return true
 end
 --=======================================================================================
 --Composer
