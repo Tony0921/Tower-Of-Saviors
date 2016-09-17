@@ -22,6 +22,12 @@ local map
 local top
 local floor
 local message
+local nameText
+local stoneText
+local moneyText
+local myName = "Tony Chen"
+local stone = "999"
+local money = "999,999,999"
 local mapGroup = display.newGroup( )
 
 --function
@@ -43,13 +49,28 @@ initial = function ( group )
 	mapGroup.x = 0
 	mapGroup.y = 0
 
-	top = display.newImageRect( group, "Images/newTop.png", 0, 0 )
+	top = display.newImageRect( group, "Images/top_nil.png", 0, 0 )
 	top.x = 0
 	top.y = 0
 	top.anchorX = 0
 	top.anchorY = 0
 	top.width = _SCREEN.WIDTH
 	top.height = 242 / (1077/320)
+
+	nameText = display.newText( myName, 0, 0, native.systemFont , 12 )
+	nameText.x = 60
+	nameText.y = 14
+	nameText:setFillColor( 1, 1, 1 )
+
+	stoneText = display.newText( stone, 0, 0, native.systemFont , 12 )
+	stoneText.x = 245
+	stoneText.y = 14
+	stoneText:setFillColor( 1, 0, 1 )
+
+	moneyText = display.newText( money, 0, 0, native.systemFont , 12 )
+	moneyText.x = 265
+	moneyText.y = 37
+	moneyText:setFillColor( 255/255, 215/255, 0 )
 
 	floor = display.newImageRect( group, "Images/newFloor.png", 0, 0 )
 	floor.x = 0
